@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, views, url_for
 # import sqlHelper
 from dbHelper import db
 
@@ -11,6 +11,30 @@ DATA_DIC = {
     2: {'name': '李四', 'age': 25},
 }
 
+
+# 自定义CBV视图的装饰器
+def auth(func):
+    def wrapper(*args, **kwargs):
+        result = func(*args, **kwargs)
+        return result
+
+    return wrapper
+
+
+class NewsView(views.MethodView):
+    # methods = ['POST']  # 只允许POST请求
+    decorators = [auth, ]  # 给请求加装饰器
+
+    # get请求执行的代码
+    def get(self):
+        v = url_for('news')
+        return 'get'
+
+    # post请求执行的代码
+    def post(self):
+        return 'post'
+# cbv
+app.add_url_rule('/news',view_func= NewsView.as_view(name='news'))
 
 @app.route('/login')
 def login():
