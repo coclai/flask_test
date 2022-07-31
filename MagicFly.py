@@ -33,8 +33,21 @@ class NewsView(views.MethodView):
     # post请求执行的代码
     def post(self):
         return 'post'
+
+
 # cbv
-app.add_url_rule('/news',view_func= NewsView.as_view(name='news'))
+app.add_url_rule('/news', view_func=NewsView.as_view(name='news'))
+
+
+class HelloView(views.View):
+    methods = ['GET']
+
+    def dispatch_request(self, name):
+        return "Hello %s!" % name
+
+
+app.add_url_rule('/hello/<name>', view_func=HelloView.as_view('hello'))
+
 
 @app.route('/login')
 def login():
